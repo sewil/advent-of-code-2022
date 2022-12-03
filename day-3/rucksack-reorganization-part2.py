@@ -1,22 +1,17 @@
+import functools
 # a-z 1-26
 # A-Z 27-52
 alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-def conv(a):
-  prs = set()
-  for i in a:
-    prs.add(alpha.index(i)+1)
-  return prs
-
 points = 0
 with open("input.txt") as f:
   lines = f.read().splitlines()
   for i in range(0, len(lines), 3):
-    e1 = conv(lines[i])
-    e2 = conv(lines[i+1])
-    e3 = conv(lines[i+2])
-    badge = sum(e1 & e2 & e3)
+    group = lines[i:i+3]
+    badge_c = functools.reduce(lambda a,b: set(a) & set(b), group).pop()
+    badge = alpha.index(badge_c)+1
     points += badge
-    print('group', (i/3)+1,e1,e2,e3,badge)
+    print('group',int(i/3)+1)
+    print('\n'.join(group))
+    print(badge_c, badge, "\n")
 
 print(points)
